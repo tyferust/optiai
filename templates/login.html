@@ -5,58 +5,66 @@
     <title>Opti AI | Universal Performance</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        /* 1. PARALLAX GIF BACKGROUND */
+        /* PARALLAX GIF BACKGROUND */
         .bg-fixed-gif {
             position: fixed;
             top: 0; left: 0;
             width: 100%; height: 100%;
             z-index: -1;
             object-fit: cover;
-            filter: brightness(0.4); /* Reduced blur, kept brightness low for readability */
+            filter: brightness(0.35) contrast(1.1); /* Kept GIF visible but text-friendly */
         }
 
-        /* 2. ENTRANCE ANIMATIONS */
+        /* ENTRANCE ANIMATIONS */
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
+            from { opacity: 0; transform: translateY(15px); }
             to { opacity: 1; transform: translateY(0); }
         }
         .animate-fade { animation: fadeIn 1.5s ease-out forwards; }
 
-        /* 3. GLASSMORPHISM */
         .glass-panel {
-            background: rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(15px);
-            border: 1px solid rgba(8, 145, 178, 0.3);
-            box-shadow: 0 0 50px rgba(0, 0, 0, 0.9);
+            background: rgba(0, 0, 0, 0.75);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(34, 211, 238, 0.2);
+            box-shadow: 0 0 60px rgba(0, 0, 0, 0.9);
         }
 
-        /* 4. SCROLL INDICATOR ANIMATION */
-        @keyframes bounce-slow {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(10px); }
-        }
-        .animate-bounce-slow { animation: bounce-slow 2s infinite; }
+        .glow-cyan { text-shadow: 0 0 20px rgba(34, 211, 238, 0.5); }
     </style>
 </head>
-<body class="bg-black text-white font-sans">
+<body class="bg-black text-white font-sans overflow-x-hidden">
 
     <img src="https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExNHJueXF4eXF4eXF4eXF4eXF4eXF4eXF4eXF4eXF4eXF4eXF4JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1n/3o7TKMGpxx32dqRlzO/giphy.gif" class="bg-fixed-gif">
 
-    <section class="h-screen flex flex-col items-center justify-center p-6 text-center animate-fade">
-        <div class="inline-block px-4 py-1 rounded-full border border-cyan-500/30 bg-cyan-500/10 text-cyan-400 text-[10px] font-black uppercase tracking-[0.5em] mb-6">
-            Neural Optimization System v2.0
+    <section class="min-h-screen flex flex-col items-center justify-center p-8 text-center animate-fade">
+        <div class="inline-block px-4 py-1 rounded-full border border-cyan-500/40 bg-cyan-500/10 text-cyan-400 text-[9px] font-black uppercase tracking-[0.5em] mb-8">
+            Neural Architecture v2.0.4 // Active
         </div>
-        <h1 class="text-7xl font-black italic tracking-tighter mb-4 uppercase drop-shadow-2xl">
+        
+        <h1 class="text-7xl md:text-8xl font-black italic tracking-tighter mb-6 uppercase glow-cyan">
             OPTI <span class="text-cyan-500">AI</span>
         </h1>
-        <p class="text-gray-300 text-sm max-w-lg mx-auto leading-relaxed font-medium">
-            Experience the pinnacle of hardware intelligence. Advanced kernel-level tweaks tailored to your unique specifications.
-        </p>
+
+        <div class="max-w-2xl space-y-6">
+            <p class="text-gray-300 text-sm md:text-base leading-relaxed font-medium">
+                The world's first <span class="text-white">Universal Performance Architect</span>. Opti AI leverages deep learning to analyze your unique hardware signature and deliver surgical, kernel-level optimizations.
+            </p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 py-4 text-[10px] font-bold tracking-widest uppercase text-cyan-500/80">
+                <div class="px-4 py-2 border border-white/5 bg-white/5 rounded-lg">Latency Reduction</div>
+                <div class="px-4 py-2 border border-white/5 bg-white/5 rounded-lg">Frame Stability</div>
+                <div class="px-4 py-2 border border-white/5 bg-white/5 rounded-lg">Kernel Tweaking</div>
+            </div>
+
+            <p class="text-gray-500 text-xs italic">
+                From high-tier PC rigs to next-gen consoles and mobile silicon, our neural engine redefines the boundaries of your hardware's potential.
+            </p>
+        </div>
         
-        <div class="absolute bottom-10 flex flex-col items-center gap-2 text-gray-500 animate-bounce-slow">
-            <span class="text-[9px] uppercase tracking-[0.4em]">Scroll to Initialize</span>
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+        <div class="mt-16 animate-bounce flex flex-col items-center gap-2 opacity-50">
+            <span class="text-[9px] uppercase tracking-[0.5em]">Scroll to Initialize Terminal</span>
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 13l-7 7-7-7" />
             </svg>
         </div>
     </section>
@@ -66,25 +74,22 @@
             <div class="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-cyan-500 to-transparent"></div>
             
             <div class="mb-10">
-                <h2 class="text-2xl font-bold uppercase tracking-widest text-white">Authentication</h2>
-                <p class="text-gray-500 text-[10px] mt-2 tracking-[0.3em]">Hardware ID & License Check</p>
+                <h2 class="text-2xl font-bold uppercase tracking-widest text-white">Security Gate</h2>
+                <p class="text-gray-500 text-[10px] mt-2 tracking-[0.4em] uppercase">Enter Hardware Activation Key</p>
             </div>
 
             <form action="/opti" method="POST" class="space-y-8">
-                <div class="relative">
-                    <input 
-                        type="text" name="license_id" id="key-input" required
-                        placeholder="XXXX-XXXX-XXXX" 
-                        class="w-full bg-transparent border-b border-cyan-900/50 py-4 text-center font-mono text-xl tracking-[0.3em] text-cyan-400 outline-none focus:border-cyan-400 transition-all placeholder:text-gray-900"
-                    >
-                </div>
-                
-                <button type="submit" class="w-full bg-white text-black font-black py-5 rounded-2xl hover:bg-cyan-500 transition-all uppercase text-xs tracking-[0.2em] shadow-xl active:scale-95">
-                    Initialize System
+                <input 
+                    type="text" name="license_id" id="key-input" required
+                    placeholder="XXXX-XXXX-XXXX" 
+                    class="w-full bg-transparent border-b border-cyan-900/50 py-4 text-center font-mono text-xl tracking-[0.3em] text-cyan-400 outline-none focus:border-cyan-400 transition-all placeholder:text-gray-900"
+                >
+                <button type="submit" class="w-full bg-white text-black font-black py-5 rounded-2xl hover:bg-cyan-500 transition-all uppercase text-xs tracking-[0.2em] shadow-2xl active:scale-95">
+                    Connect to Opti-Net
                 </button>
             </form>
 
-            <div class="mt-12 flex justify-center gap-8 opacity-30">
+            <div class="mt-12 flex justify-center gap-8 opacity-20 grayscale hover:opacity-100 hover:grayscale-0 transition-all duration-700">
                 <img src="https://img.icons8.com/ios-filled/50/ffffff/windows-10.png" class="h-4 w-4">
                 <img src="https://img.icons8.com/ios-filled/50/ffffff/xbox.png" class="h-4 w-4">
                 <img src="https://img.icons8.com/ios-filled/50/ffffff/playstation.png" class="h-4 w-4">
@@ -92,12 +97,7 @@
         </div>
     </section>
 
-    <footer class="py-10 text-center">
-        <p class="text-[9px] text-gray-700 font-mono tracking-[0.6em] uppercase">Built for Performance // Opti-Kernel 2026</p>
-    </footer>
-
     <script>
-        // QoL: Auto-formatting for license keys
         const input = document.getElementById('key-input');
         input.addEventListener('input', (e) => {
             let v = e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, '');
