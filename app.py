@@ -60,3 +60,9 @@ def ask_ai():
         return f"System Error: {str(e)}"
 
 # Standard Login/Logout Routes remain unchanged
+
+if __name__ == "__main__":
+    # Render provides a 'PORT' environment variable. 
+    # If it's missing, it defaults to 10000.
+    port = int(os.environ.get("PORT", 10000))
+    app.run(host='0.0.0.0', port=port)
