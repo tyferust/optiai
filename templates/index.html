@@ -1,44 +1,72 @@
 <!DOCTYPE html>
-<html class="h-full">
+<html class="h-full bg-black">
 <head>
     <meta charset="UTF-8">
-    <title>Opti AI | Terminal</title>
+    <title>Opti AI | Premium</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        .bg-fixed-gif { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; object-fit: cover; filter: brightness(0.2); }
-        .terminal-window {
-            background: rgba(10, 10, 10, 0.9); backdrop-filter: blur(25px);
-            border: 1px solid rgba(34, 211, 238, 0.2); width: 480px; height: 620px;
+        /* GLASSMORPHISM CORE */
+        .glass { 
+            background: rgba(255, 255, 255, 0.03); 
+            backdrop-filter: blur(12px); 
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08); 
         }
-        ::-webkit-scrollbar { display: none; }
+        .sidebar-link:hover { background: rgba(6, 182, 212, 0.1); border-left: 4px solid #06b6d4; }
+        body { background: url('YOUR_GIF_URL') center/cover no-repeat fixed; }
     </style>
 </head>
-<body class="bg-black text-white flex items-center justify-center h-screen overflow-hidden">
+<body class="flex h-screen p-4 gap-4 overflow-hidden text-gray-200">
 
-    <img src="https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExNHJueXF4eXF4eXF4eXF4eXF4eXF4eXF4eXF4eXF4eXF4eXF4JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1n/3o7TKMGpxx32dqRlzO/giphy.gif" class="bg-fixed-gif">
+    <aside class="w-64 glass rounded-[2.5rem] flex flex-col p-6 shadow-2xl">
+        <div class="mb-10 px-4">
+            <h1 class="text-2xl font-black italic tracking-tighter text-cyan-400">OPTI <span class="text-white">AI</span></h1>
+            <p class="text-[8px] uppercase tracking-[0.4em] opacity-30">Performance Core v2</p>
+        </div>
 
-    <div class="terminal-window rounded-[2rem] shadow-2xl flex flex-col relative">
-        
-        <div class="p-6 border-b border-white/5 flex justify-between items-center">
-            <div class="flex items-center gap-2">
+        <nav class="flex-1 space-y-2">
+            <button class="sidebar-link w-full flex items-center gap-4 px-6 py-4 rounded-2xl transition-all">
+                <span class="text-lg">⚡</span> <span class="text-sm font-bold opacity-70">Optimizer</span>
+            </button>
+            <button class="sidebar-link w-full flex items-center gap-4 px-6 py-4 rounded-2xl transition-all">
+                <span class="text-lg">📊</span> <span class="text-sm font-bold opacity-70">Telemetry</span>
+            </button>
+        </nav>
+
+        <a href="/logout" class="mt-auto group p-5 glass rounded-3xl flex items-center justify-center gap-3 hover:bg-red-500/20 transition-all">
+            <span class="text-[10px] font-black tracking-widest text-red-500">TERMINATE</span>
+        </a>
+    </aside>
+
+    <main class="flex-1 glass rounded-[2.5rem] flex flex-col shadow-2xl overflow-hidden relative">
+        <div class="p-6 border-b border-white/5 flex justify-between items-center bg-white/5">
+            <div class="flex items-center gap-3">
                 <div class="w-2 h-2 rounded-full bg-cyan-500 animate-pulse"></div>
-                <span class="text-[10px] font-black uppercase tracking-[0.3em] text-cyan-500">Opti AI // Core</span>
+                <span class="text-[10px] font-bold uppercase tracking-widest text-gray-400">System Link: Active</span>
             </div>
-            <a href="/logout" class="w-7 h-7 rounded-full border border-red-500/30 flex items-center justify-center hover:bg-red-500/80 transition-all group">
-                <span class="text-xs text-red-500 group-hover:text-white transition-colors">✕</span>
-            </a>
+            <div class="flex gap-2">
+                <div class="w-3 h-3 rounded-full bg-white/10"></div>
+                <div class="w-3 h-3 rounded-full bg-white/10"></div>
+            </div>
         </div>
 
-        <div id="chat-box" class="flex-1 overflow-y-auto p-8 space-y-6 text-sm font-mono leading-relaxed">
-            <div class="text-cyan-400">{{ initial_msg }}</div>
+        <div id="chat-box" class="flex-1 overflow-y-auto p-10 space-y-8 scroll-smooth">
+            <div class="flex gap-4 animate-in fade-in slide-in-from-bottom-4 duration-500">
+                <div class="w-10 h-10 rounded-2xl glass flex items-center justify-center border-cyan-500/30">🤖</div>
+                <div class="max-w-xl p-6 rounded-3xl rounded-tl-none glass border-white/10 text-sm leading-relaxed text-gray-300">
+                    {{ initial_msg }}
+                </div>
+            </div>
         </div>
 
-        <form id="chat-form" class="p-6 border-t border-white/5 flex gap-4">
-            <input type="text" id="user-input" placeholder="Execute command..." autocomplete="off"
-                class="flex-1 bg-transparent text-sm font-mono outline-none border-b border-white/10 focus:border-cyan-500 transition-all placeholder:text-gray-800">
-            <button type="submit" class="text-cyan-500 text-[10px] font-black uppercase tracking-widest">Run</button>
-        </form>
-    </div>
+        <div class="p-8 bg-black/20 backdrop-blur-xl border-t border-white/5">
+            <form id="chat-form" class="flex gap-4 max-w-4xl mx-auto">
+                <input type="text" id="user-input" placeholder="Enter system command..." autocomplete="off"
+                    class="flex-1 bg-transparent border-b-2 border-white/5 py-3 text-sm font-mono outline-none focus:border-cyan-500 transition-all">
+                <button type="submit" class="bg-cyan-600 hover:bg-cyan-500 px-8 rounded-2xl font-black text-[10px] uppercase tracking-widest transition-all active:scale-95 shadow-lg shadow-cyan-500/20">Execute</button>
+            </form>
+        </div>
+    </main>
 
     <script>
         const form = document.getElementById('chat-form');
@@ -51,15 +79,29 @@
             if(!val) return;
             input.value = '';
 
-            box.innerHTML += `<div class="text-gray-600 font-mono">> ${val}</div>`;
+            // User Message Style
+            box.innerHTML += `
+                <div class="flex justify-end animate-in fade-in slide-in-from-bottom-2 duration-300">
+                    <div class="max-w-lg p-5 rounded-3xl rounded-tr-none glass border-cyan-500/20 text-sm italic text-cyan-200 shadow-xl shadow-cyan-900/10">
+                        > ${val}
+                    </div>
+                </div>`;
             
+            // AI Response
             const resp = await fetch('/ask', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
                 body: `query=${encodeURIComponent(val)}`
             });
-            const data = await resp.text();
-            box.innerHTML += `<div class="text-cyan-400 font-mono">${data}</div>`;
+            const text = await resp.text();
+            
+            box.innerHTML += `
+                <div class="flex gap-4 animate-in fade-in slide-in-from-bottom-4 duration-500">
+                    <div class="w-10 h-10 rounded-2xl glass flex items-center justify-center">🤖</div>
+                    <div class="max-w-xl p-6 rounded-3xl rounded-tl-none glass border-white/10 text-sm leading-relaxed text-gray-300">
+                        ${text}
+                    </div>
+                </div>`;
             box.scrollTop = box.scrollHeight;
         };
     </script>
