@@ -1,16 +1,19 @@
 import os
+import re
 import psycopg2
 from flask import Flask, render_template, request, session, redirect, url_for
 from openai import OpenAI
 
 app = Flask(__name__)
-app.secret_key = os.environ.get("FLASK_SECRET_KEY", "opti_premium_2026")
-client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
+app.secret_key = os.environ.get("FLASK_SECRET_KEY", "opti_pro_2026")
+client = OpenAI(api_api_key=os.environ.get("OPENAI_API_KEY"))
 
-DB_URL = os.environ.get("DATABASE_URL")
+# DB & AUTH LOGIC
+VALID_KEYS = ["OPTI-1234", "OPTI-5678", "VIP-ACCESS", "OPTI-2026-X"]
 
-def get_db_connection():
-    return psycopg2.connect(DB_URL, connect_timeout=10)
+def clean_markdown(text):
+    # Removes **bold**, *italics*, and bullet asterisks for a clean look
+    return re.sub(r'\*+', '', text)
 
 @app.route('/')
 def login():
@@ -19,18 +22,16 @@ def login():
 
 @app.route('/logout')
 def logout():
-    session.clear() # Clears license and chat history
+    session.clear() # Standard session termination
     return redirect(url_for('login'))
 
 @app.route('/opti', methods=['POST'])
 def handle_login():
     user_key = request.form.get('license_id', '').strip().upper()
-    valid_keys = ["OPTI-1234", "OPTI-5678", "VIP-ACCESS", "OPTI-2026-X"]
-
-    if user_key in valid_keys:
+    if user_key in VALID_KEYS:
         session["user_key"] = user_key
-        # Initial greeting forces the onboarding flow
-        session["history"] = [{"role": "assistant", "content": "System Initialized. To begin your optimization journey, please provide your **Specs (CPU/GPU/RAM)**, **Platform**, and **Favorite Games**."}]
+        # Initial AI prompt without asterisks
+        session["history"] = [{"role": "assistant", "content": "Neural Link Established. Please provide your Specs, Platform, and Favorite Games to begin."}]
         return redirect(url_for('opti_chat'))
     return "Invalid Key."
 
@@ -47,22 +48,19 @@ def ask_ai():
 
     system_msg = {
         "role": "system", 
-        "content": """You are Opti AI. Follow this workflow strictly:
-        1. On the FIRST user message (Specs/Games), acknowledge them briefly, then ASK: 'What kind of optimizations do you want? (General Windows, Advanced Windows, Internet/Wifi, or BIOS)'.
-        2. Do NOT provide tips until the user has chosen one of those categories.
-        3. Once a category is chosen, provide elite, surgical tips.
-        4. ALWAYS end every optimization response with ratings: [EFF: X/5] [RSK: Y/5]."""
+        "content": "You are Opti AI. NO MARKDOWN. NO ASTERISKS. Use plain, professional text. Follow the onboarding flow strictly."
     }
 
     history.append({"role": "user", "content": user_query})
-    try:
-        response = client.chat.completions.create(model="gpt-4o", messages=[system_msg] + history[-10:])
-        ai_msg = response.choices[0].message.content
-        history.append({"role": "assistant", "content": ai_msg})
-        session["history"] = history
-        return ai_msg
-    except Exception as e:
-        return f"AI Error: {str(e)}"
+    response = client.chat.completions.create(model="gpt-4o", messages=[system_msg] + history[-10:])
+    raw_ai_msg = response.choices[0].message.content
+    
+    # Clean the message before sending to the UI
+    clean_msg = clean_markdown(raw_ai_msg)
+    
+    history.append({"role": "assistant", "content": clean_msg})
+    session["history"] = history
+    return clean_msg
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 10000))
