@@ -1,79 +1,105 @@
 <!DOCTYPE html>
-<html class="bg-black text-white h-full scroll-smooth">
+<html class="bg-black text-white h-full overflow-hidden">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Opti AI | Authentication</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        .glow-card {
-            background: rgba(8, 145, 178, 0.02);
-            border: 1px solid rgba(8, 145, 178, 0.1);
-            backdrop-filter: blur(20px);
-            box-shadow: 0 0 50px rgba(0, 0, 0, 1);
+        /* 1. BACKGROUND GIF LAYER */
+        .bg-video {
+            position: fixed;
+            right: 0;
+            bottom: 0;
+            min-width: 100%;
+            min-height: 100%;
+            z-index: -1;
+            filter: brightness(0.3) blur(8px);
+            object-fit: cover;
         }
-        .bg-grid {
-            background-image: radial-gradient(circle at 2px 2px, rgba(8, 145, 178, 0.05) 1px, transparent 0);
-            background-size: 40px 40px;
+
+        /* 2. ENTRANCE ANIMATIONS */
+        @keyframes container-reveal {
+            0% { opacity: 0; transform: scale(0.9) translateY(30px); filter: blur(10px); }
+            100% { opacity: 1; transform: scale(1) translateY(0); filter: blur(0); }
         }
-        @keyframes pulse-glow {
-            0%, 100% { box-shadow: 0 0 20px rgba(8, 145, 178, 0.2); }
-            50% { box-shadow: 0 0 40px rgba(8, 145, 178, 0.4); }
+        .animate-reveal { animation: container-reveal 1.2s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
+
+        /* 3. GLASS CARD LOOK */
+        .glass-card {
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(25px);
+            border: 1px solid rgba(34, 211, 238, 0.2);
+            box-shadow: 0 0 80px rgba(0, 0, 0, 0.5), inset 0 0 20px rgba(34, 211, 238, 0.05);
         }
-        .btn-pulse { animation: pulse-glow 3s infinite; }
+
+        /* 4. GLOWING BUTTON */
+        .btn-glow {
+            transition: 0.3s ease;
+            box-shadow: 0 0 15px rgba(34, 211, 238, 0.2);
+        }
+        .btn-glow:hover {
+            box-shadow: 0 0 30px rgba(34, 211, 238, 0.6);
+            transform: translateY(-2px);
+        }
     </style>
 </head>
-<body class="bg-black bg-grid flex items-center justify-center p-6 h-full font-sans">
+<body class="flex items-center justify-center h-full">
 
-    <div class="max-w-xl w-full space-y-8 animate-in fade-in zoom-in duration-700">
+    <img src="https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExNHJueXF4eXF4eXF4eXF4eXF4eXF4eXF4eXF4eXF4eXF4eXF4JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1n/3o7TKMGpxx32dqRlzO/giphy.gif" class="bg-video" alt="background">
+
+    <div class="max-w-md w-full p-6 animate-reveal">
         
-        <div class="text-center space-y-4">
-            <div class="inline-block px-3 py-1 rounded-full border border-cyan-500/30 bg-cyan-500/5 text-cyan-400 text-[10px] font-black uppercase tracking-[0.3em] mb-2">
-                Neural Performance Engine
+        <div class="glass-card p-10 rounded-[3rem] relative text-center">
+            
+            <div class="mb-10">
+                <div class="inline-block px-4 py-1 rounded-full border border-cyan-500/30 bg-cyan-500/10 text-cyan-400 text-[9px] font-black uppercase tracking-[0.4em] mb-4">
+                    Neural Engine Online
+                </div>
+                <h1 class="text-5xl font-black italic tracking-tighter mb-4">
+                    OPTI <span class="text-cyan-500 drop-shadow-[0_0_15px_rgba(34,211,238,0.8)]">AI</span>
+                </h1>
+                <p class="text-gray-400 text-xs leading-relaxed font-medium">
+                    Personalized system architecture & kernel-level tweaks for <span class="text-white">Windows, Console, & Mobile</span>.
+                </p>
             </div>
-            <h1 class="text-5xl font-black tracking-tighter italic">OPTI <span class="text-cyan-500">AI</span></h1>
-            
-            <p class="text-gray-500 text-sm leading-relaxed max-w-sm mx-auto">
-                The world's first universal <span class="text-gray-300">Personalized Optimization AI</span>. Engineering kernel-level tweaks for PC, Console, and Mobile hardware.
-            </p>
-        </div>
 
-        <div class="glow-card p-10 rounded-[2.5rem] relative overflow-hidden">
-            <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-cyan-500 to-transparent opacity-50"></div>
-            
             <form action="/opti" method="POST" class="space-y-8">
-                <div class="space-y-2">
-                    <label class="block text-center text-[10px] uppercase tracking-[0.4em] text-gray-600 font-bold">Input License Key</label>
+                <div class="relative group">
                     <input 
                         type="text" 
                         name="license_id" 
                         id="key-input"
                         required
-                        placeholder="XXXX-XXXX-XXXX" 
-                        class="w-full bg-transparent border-b border-cyan-900/50 py-4 text-center font-mono text-2xl tracking-[0.25em] text-cyan-400 outline-none focus:border-cyan-400 transition-all placeholder:text-gray-900"
+                        placeholder="LICENSE-KEY" 
+                        class="w-full bg-transparent border-b-2 border-cyan-900/50 py-4 text-center font-mono text-xl tracking-[0.3em] text-cyan-400 outline-none focus:border-cyan-500 transition-all placeholder:text-gray-800"
                     >
+                    <div class="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-0.5 bg-cyan-400 transition-all group-focus-within:w-full"></div>
                 </div>
 
                 <button 
                     type="submit" 
-                    class="w-full bg-white text-black font-black py-5 rounded-2xl transition-all hover:bg-cyan-400 btn-pulse uppercase tracking-tighter text-sm"
+                    class="w-full bg-cyan-500 text-black font-black py-5 rounded-2xl btn-glow uppercase tracking-tighter text-sm"
                 >
                     Initialize Connection
                 </button>
             </form>
 
-            <div class="mt-10 flex justify-center gap-8 items-center opacity-20 grayscale">
+            <div class="mt-12 flex justify-center gap-6 items-center opacity-30">
                 <img src="https://img.icons8.com/ios-filled/50/ffffff/windows-10.png" class="h-4 w-4">
                 <img src="https://img.icons8.com/ios-filled/50/ffffff/xbox.png" class="h-4 w-4">
                 <img src="https://img.icons8.com/ios-filled/50/ffffff/playstation.png" class="h-4 w-4">
             </div>
+
         </div>
 
-        <p class="text-center text-[9px] text-gray-700 font-mono tracking-[0.5em] uppercase">Universal Protocol // Secured by PostgreSQL</p>
+        <p class="text-center mt-8 text-[9px] text-gray-600 font-mono tracking-[0.6em] uppercase">
+            Universal Protocol Locked
+        </p>
     </div>
 
     <script>
-        // QoL: Automated Key Formatting (Dashes & Caps)
+        // QoL: Auto-Dash formatting
         const input = document.getElementById('key-input');
         input.addEventListener('input', (e) => {
             let value = e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, '');
