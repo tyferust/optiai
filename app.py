@@ -1,15 +1,34 @@
 import os
+import sqlite3
 from flask import Flask, render_template, request, session, redirect, url_for
 from openai import OpenAI
 
 app = Flask(__name__)
-app.secret_key = os.environ.get("FLASK_SECRET_KEY", "opti_ultra_secret_2026")
+app.secret_key = os.environ.get("FLASK_SECRET_KEY", "ultra_secure_opti_2026")
 client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
 
-# SECURITY: This dictionary tracks who owns which code
-# In a real big business, we'd use a database, but this works for starting out!
-CLAIMED_KEYS = {} 
-VALID_KEYS = ["OPTI-1234", "OPTI-5678", "VIP-ACCESS", "TEST-99"]
+DATABASE = 'optiai.db'
+
+# --- DATABASE SETUP ---
+def init_db():
+    """Creates the database table if it doesn't exist yet."""
+    conn = sqlite3.connect(DATABASE)
+    cursor = conn.cursor()
+    # This table stores the Key and the IP address that first used it
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS license_claims (
+            license_key TEXT PRIMARY KEY,
+            user_ip TEXT
+        )
+    ''')
+    conn.commit()
+    conn.close()
+
+# Run the database setup immediately
+init_db()
+
+# --- THE LOGIC ---
+VALID_KEYS = ["OPTI-1234", "OPTI-5678", "VIP-ACCESS"]
 
 @app.route('/')
 def login():
@@ -20,19 +39,30 @@ def login():
 @app.route('/opti', methods=['POST'])
 def handle_login():
     user_key = request.form.get('license_id')
-    user_ip = request.remote_addr # Tracks their basic connection ID
+    user_ip = request.remote_addr # Tracks their specific device
 
-    if user_key in VALID_KEYS:
-        # Check if the key is already taken by someone else
-        if user_key in CLAIMED_KEYS and CLAIMED_KEYS[user_key] != user_ip:
-            return "This license is already in use on another device."
-        
-        # Claim the key for this user
-        CLAIMED_KEYS[user_key] = user_ip
-        session["user_key"] = user_key
-        return redirect(url_for('opti_chat'))
+    if user_key not in VALID_KEYS:
+        return "Invalid License Key."
+
+    # Check the database to see if someone already claimed this key
+    conn = sqlite3.connect(DATABASE)
+    cursor = conn.cursor()
+    cursor.execute("SELECT user_ip FROM license_claims WHERE license_key = ?", (user_key,))
+    result = cursor.fetchone()
+
+    if result:
+        # Key has been used before. Is it the same person?
+        if result[0] != user_ip:
+            conn.close()
+            return "ACCESS DENIED: This key is already locked to another device."
+    else:
+        # First time this key is used! Lock it to this IP.
+        cursor.execute("INSERT INTO license_claims (license_key, user_ip) VALUES (?, ?)", (user_key, user_ip))
+        conn.commit()
     
-    return "Invalid License Key."
+    conn.close()
+    session["user_key"] = user_key
+    return redirect(url_for('opti_chat'))
 
 @app.route('/dashboard')
 def opti_chat():
@@ -48,16 +78,13 @@ def ask_ai():
         response = client.chat.completions.create(
             model="gpt-4o",
             messages=[
-                {
-                    "role": "system", 
-                    "content": "You are Opti AI. Respond in clean, plain text. NEVER use hashtags (#) or bold stars (**). Use clear spacing and bullet points only. Sound like an elite PC tuner."
-                },
+                {"role": "system", "content": "You are Opti AI. Respond in clean, plain text. No hashtags. Neat spacing only."},
                 {"role": "user", "content": user_query}
             ]
         )
         return response.choices[0].message.content
     except Exception as e:
-        return f"Error: {str(e)}"
+        return f"AI Error: {str(e)}"
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 10000))
