@@ -1,111 +1,109 @@
 <!DOCTYPE html>
-<html class="bg-black text-white h-full overflow-hidden">
+<html class="h-full scroll-smooth">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Opti AI | Authentication</title>
+    <title>Opti AI | Universal Performance</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        /* 1. BACKGROUND GIF LAYER */
-        .bg-video {
+        /* 1. PARALLAX GIF BACKGROUND */
+        .bg-fixed-gif {
             position: fixed;
-            right: 0;
-            bottom: 0;
-            min-width: 100%;
-            min-height: 100%;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
             z-index: -1;
-            filter: brightness(0.3) blur(8px);
             object-fit: cover;
+            filter: brightness(0.4); /* Reduced blur, kept brightness low for readability */
         }
 
         /* 2. ENTRANCE ANIMATIONS */
-        @keyframes container-reveal {
-            0% { opacity: 0; transform: scale(0.9) translateY(30px); filter: blur(10px); }
-            100% { opacity: 1; transform: scale(1) translateY(0); filter: blur(0); }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
-        .animate-reveal { animation: container-reveal 1.2s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
+        .animate-fade { animation: fadeIn 1.5s ease-out forwards; }
 
-        /* 3. GLASS CARD LOOK */
-        .glass-card {
-            background: rgba(0, 0, 0, 0.6);
-            backdrop-filter: blur(25px);
-            border: 1px solid rgba(34, 211, 238, 0.2);
-            box-shadow: 0 0 80px rgba(0, 0, 0, 0.5), inset 0 0 20px rgba(34, 211, 238, 0.05);
+        /* 3. GLASSMORPHISM */
+        .glass-panel {
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(8, 145, 178, 0.3);
+            box-shadow: 0 0 50px rgba(0, 0, 0, 0.9);
         }
 
-        /* 4. GLOWING BUTTON */
-        .btn-glow {
-            transition: 0.3s ease;
-            box-shadow: 0 0 15px rgba(34, 211, 238, 0.2);
+        /* 4. SCROLL INDICATOR ANIMATION */
+        @keyframes bounce-slow {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(10px); }
         }
-        .btn-glow:hover {
-            box-shadow: 0 0 30px rgba(34, 211, 238, 0.6);
-            transform: translateY(-2px);
-        }
+        .animate-bounce-slow { animation: bounce-slow 2s infinite; }
     </style>
 </head>
-<body class="flex items-center justify-center h-full">
+<body class="bg-black text-white font-sans">
 
-    <img src="https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExNHJueXF4eXF4eXF4eXF4eXF4eXF4eXF4eXF4eXF4eXF4eXF4JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1n/3o7TKMGpxx32dqRlzO/giphy.gif" class="bg-video" alt="background">
+    <img src="https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExNHJueXF4eXF4eXF4eXF4eXF4eXF4eXF4eXF4eXF4eXF4eXF4JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1n/3o7TKMGpxx32dqRlzO/giphy.gif" class="bg-fixed-gif">
 
-    <div class="max-w-md w-full p-6 animate-reveal">
+    <section class="h-screen flex flex-col items-center justify-center p-6 text-center animate-fade">
+        <div class="inline-block px-4 py-1 rounded-full border border-cyan-500/30 bg-cyan-500/10 text-cyan-400 text-[10px] font-black uppercase tracking-[0.5em] mb-6">
+            Neural Optimization System v2.0
+        </div>
+        <h1 class="text-7xl font-black italic tracking-tighter mb-4 uppercase drop-shadow-2xl">
+            OPTI <span class="text-cyan-500">AI</span>
+        </h1>
+        <p class="text-gray-300 text-sm max-w-lg mx-auto leading-relaxed font-medium">
+            Experience the pinnacle of hardware intelligence. Advanced kernel-level tweaks tailored to your unique specifications.
+        </p>
         
-        <div class="glass-card p-10 rounded-[3rem] relative text-center">
+        <div class="absolute bottom-10 flex flex-col items-center gap-2 text-gray-500 animate-bounce-slow">
+            <span class="text-[9px] uppercase tracking-[0.4em]">Scroll to Initialize</span>
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+            </svg>
+        </div>
+    </section>
+
+    <section class="h-screen flex items-center justify-center p-6">
+        <div class="glass-panel p-12 rounded-[3.5rem] max-w-md w-full text-center relative overflow-hidden">
+            <div class="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-cyan-500 to-transparent"></div>
             
             <div class="mb-10">
-                <div class="inline-block px-4 py-1 rounded-full border border-cyan-500/30 bg-cyan-500/10 text-cyan-400 text-[9px] font-black uppercase tracking-[0.4em] mb-4">
-                    Neural Engine Online
-                </div>
-                <h1 class="text-5xl font-black italic tracking-tighter mb-4">
-                    OPTI <span class="text-cyan-500 drop-shadow-[0_0_15px_rgba(34,211,238,0.8)]">AI</span>
-                </h1>
-                <p class="text-gray-400 text-xs leading-relaxed font-medium">
-                    Personalized system architecture & kernel-level tweaks for <span class="text-white">Windows, Console, & Mobile</span>.
-                </p>
+                <h2 class="text-2xl font-bold uppercase tracking-widest text-white">Authentication</h2>
+                <p class="text-gray-500 text-[10px] mt-2 tracking-[0.3em]">Hardware ID & License Check</p>
             </div>
 
             <form action="/opti" method="POST" class="space-y-8">
-                <div class="relative group">
+                <div class="relative">
                     <input 
-                        type="text" 
-                        name="license_id" 
-                        id="key-input"
-                        required
-                        placeholder="LICENSE-KEY" 
-                        class="w-full bg-transparent border-b-2 border-cyan-900/50 py-4 text-center font-mono text-xl tracking-[0.3em] text-cyan-400 outline-none focus:border-cyan-500 transition-all placeholder:text-gray-800"
+                        type="text" name="license_id" id="key-input" required
+                        placeholder="XXXX-XXXX-XXXX" 
+                        class="w-full bg-transparent border-b border-cyan-900/50 py-4 text-center font-mono text-xl tracking-[0.3em] text-cyan-400 outline-none focus:border-cyan-400 transition-all placeholder:text-gray-900"
                     >
-                    <div class="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-0.5 bg-cyan-400 transition-all group-focus-within:w-full"></div>
                 </div>
-
-                <button 
-                    type="submit" 
-                    class="w-full bg-cyan-500 text-black font-black py-5 rounded-2xl btn-glow uppercase tracking-tighter text-sm"
-                >
-                    Initialize Connection
+                
+                <button type="submit" class="w-full bg-white text-black font-black py-5 rounded-2xl hover:bg-cyan-500 transition-all uppercase text-xs tracking-[0.2em] shadow-xl active:scale-95">
+                    Initialize System
                 </button>
             </form>
 
-            <div class="mt-12 flex justify-center gap-6 items-center opacity-30">
+            <div class="mt-12 flex justify-center gap-8 opacity-30">
                 <img src="https://img.icons8.com/ios-filled/50/ffffff/windows-10.png" class="h-4 w-4">
                 <img src="https://img.icons8.com/ios-filled/50/ffffff/xbox.png" class="h-4 w-4">
                 <img src="https://img.icons8.com/ios-filled/50/ffffff/playstation.png" class="h-4 w-4">
             </div>
-
         </div>
+    </section>
 
-        <p class="text-center mt-8 text-[9px] text-gray-600 font-mono tracking-[0.6em] uppercase">
-            Universal Protocol Locked
-        </p>
-    </div>
+    <footer class="py-10 text-center">
+        <p class="text-[9px] text-gray-700 font-mono tracking-[0.6em] uppercase">Built for Performance // Opti-Kernel 2026</p>
+    </footer>
 
     <script>
-        // QoL: Auto-Dash formatting
+        // QoL: Auto-formatting for license keys
         const input = document.getElementById('key-input');
         input.addEventListener('input', (e) => {
-            let value = e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, '');
-            if (value.length > 12) value = value.slice(0, 12);
-            const parts = value.match(/.{1,4}/g);
-            e.target.value = parts ? parts.join('-') : value;
+            let v = e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, '');
+            if (v.length > 12) v = v.slice(0, 12);
+            const p = v.match(/.{1,4}/g);
+            e.target.value = p ? p.join('-') : v;
         });
     </script>
 </body>
