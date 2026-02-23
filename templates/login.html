@@ -1,137 +1,86 @@
 <!DOCTYPE html>
-<html class="bg-black text-white h-full overflow-hidden">
+<html class="bg-black text-white h-full scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Opti AI | Universal Performance Authentication</title>
+    <title>Opti AI | Authentication</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        /* Floating animation for the brand side */
-        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
-        .animate-float { animation: float 6s ease-in-out infinite; }
-        
-        /* Glassmorphism effect */
-        .glass { 
-            background: rgba(8, 145, 178, 0.03); 
-            backdrop-filter: blur(20px); 
-            border: 1px solid rgba(8, 145, 178, 0.15); 
+        .glow-card {
+            background: rgba(8, 145, 178, 0.02);
+            border: 1px solid rgba(8, 145, 178, 0.1);
+            backdrop-filter: blur(20px);
+            box-shadow: 0 0 50px rgba(0, 0, 0, 1);
         }
-
-        /* Subtle background mesh glow */
-        .bg-mesh {
-            background-color: #000;
-            background-image: 
-                radial-gradient(at 0% 0%, rgba(8, 145, 178, 0.12) 0, transparent 50%),
-                radial-gradient(at 100% 100%, rgba(8, 145, 178, 0.08) 0, transparent 50%);
+        .bg-grid {
+            background-image: radial-gradient(circle at 2px 2px, rgba(8, 145, 178, 0.05) 1px, transparent 0);
+            background-size: 40px 40px;
         }
-
-        /* Custom glow text */
-        .glow-text {
-            text-shadow: 0 0 20px rgba(34, 211, 238, 0.4);
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 20px rgba(8, 145, 178, 0.2); }
+            50% { box-shadow: 0 0 40px rgba(8, 145, 178, 0.4); }
         }
+        .btn-pulse { animation: pulse-glow 3s infinite; }
     </style>
 </head>
-<body class="h-full bg-mesh font-sans">
+<body class="bg-black bg-grid flex items-center justify-center p-6 h-full font-sans">
 
-    <div class="flex h-full flex-col md:flex-row">
+    <div class="max-w-xl w-full space-y-8 animate-in fade-in zoom-in duration-700">
         
-        <div class="hidden md:flex md:w-1/2 p-16 flex-col justify-center border-r border-cyan-900/20 bg-black/40 relative overflow-hidden">
-            <div class="absolute -top-24 -left-24 w-96 h-96 bg-cyan-600/10 rounded-full blur-[120px]"></div>
-            
-            <div class="max-w-lg animate-float z-10">
-                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-cyan-500/30 bg-cyan-500/5 text-cyan-400 text-[10px] font-black uppercase tracking-[0.2em] mb-8">
-                    <span class="w-2 h-2 bg-cyan-500 rounded-full animate-pulse"></span>
-                    Neural Optimization Engine v2.0
-                </div>
-                
-                <h1 class="text-6xl font-black mb-8 leading-[0.9] tracking-tighter glow-text">
-                    ADVANCED<br>
-                    <span class="text-cyan-500">PERSONALIZED</span><br>
-                    PERFORMANCE AI
-                </h1>
-                
-                <p class="text-gray-400 text-lg leading-relaxed mb-10 max-w-md">
-                    Opti AI isn't just a chatbot—it's a specialized hardware architect. By analyzing your unique specs, we deliver <span class="text-white border-b border-cyan-500/50">kernel-level tweaks</span> for any platform, ensuring you hit peak frame rates and zero-latency response.
-                </p>
-                
-                <div class="grid grid-cols-2 gap-6">
-                    <div class="p-4 rounded-2xl border border-white/5 bg-white/5">
-                        <h3 class="text-cyan-400 text-xs font-bold uppercase mb-1">Universal</h3>
-                        <p class="text-gray-500 text-[11px]">PC, Xbox, PS5, & Mobile support.</p>
-                    </div>
-                    <div class="p-4 rounded-2xl border border-white/5 bg-white/5">
-                        <h3 class="text-cyan-400 text-xs font-bold uppercase mb-1">Adaptive</h3>
-                        <p class="text-gray-500 text-[11px]">Real-time spec-aware responses.</p>
-                    </div>
-                </div>
+        <div class="text-center space-y-4">
+            <div class="inline-block px-3 py-1 rounded-full border border-cyan-500/30 bg-cyan-500/5 text-cyan-400 text-[10px] font-black uppercase tracking-[0.3em] mb-2">
+                Neural Performance Engine
             </div>
+            <h1 class="text-5xl font-black tracking-tighter italic">OPTI <span class="text-cyan-500">AI</span></h1>
+            
+            <p class="text-gray-500 text-sm leading-relaxed max-w-sm mx-auto">
+                The world's first universal <span class="text-gray-300">Personalized Optimization AI</span>. Engineering kernel-level tweaks for PC, Console, and Mobile hardware.
+            </p>
         </div>
 
-        <div class="flex-1 flex flex-col items-center justify-center p-8 relative">
+        <div class="glow-card p-10 rounded-[2.5rem] relative overflow-hidden">
+            <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-cyan-500 to-transparent opacity-50"></div>
             
-            <div class="md:hidden mb-12 text-center">
-                 <h1 class="text-3xl font-black tracking-tighter text-cyan-500 glow-text">OPTI AI</h1>
-            </div>
-
-            <div class="w-full max-w-md glass p-10 rounded-[2.5rem] shadow-2xl relative z-10">
-                <div class="text-center mb-10">
-                    <div class="w-20 h-20 bg-cyan-600 rounded-3xl mx-auto flex items-center justify-center shadow-[0_0_40px_rgba(8,145,178,0.3)] mb-6 transform -rotate-3 hover:rotate-0 transition-transform">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
-                        </svg>
-                    </div>
-                    <h2 class="text-2xl font-bold tracking-tight mb-2">Initialize System</h2>
-                    <p class="text-gray-500 text-[10px] uppercase tracking-[0.3em]">Access restricted to license holders</p>
-                </div>
-
-                <form action="/opti" method="POST" class="space-y-6">
-                    <div class="group relative">
-                        <label class="absolute -top-2.5 left-5 bg-black px-2 text-[10px] text-cyan-500 font-mono tracking-widest uppercase z-20">License Key</label>
-                        <input 
-                            type="text" 
-                            name="license_id" 
-                            id="key-input"
-                            required
-                            placeholder="OPTI-0000-0000" 
-                            class="w-full bg-black/60 border border-cyan-900/50 p-5 rounded-2xl text-center font-mono text-xl tracking-[0.2em] text-cyan-400 outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400/20 transition-all placeholder:text-gray-900"
-                        >
-                    </div>
-
-                    <button 
-                        type="submit" 
-                        class="w-full bg-cyan-600 hover:bg-cyan-400 text-black font-black py-5 rounded-2xl transition-all shadow-[0_10px_30px_-10px_rgba(8,145,178,0.5)] active:scale-95 uppercase tracking-tighter text-sm"
+            <form action="/opti" method="POST" class="space-y-8">
+                <div class="space-y-2">
+                    <label class="block text-center text-[10px] uppercase tracking-[0.4em] text-gray-600 font-bold">Input License Key</label>
+                    <input 
+                        type="text" 
+                        name="license_id" 
+                        id="key-input"
+                        required
+                        placeholder="XXXX-XXXX-XXXX" 
+                        class="w-full bg-transparent border-b border-cyan-900/50 py-4 text-center font-mono text-2xl tracking-[0.25em] text-cyan-400 outline-none focus:border-cyan-400 transition-all placeholder:text-gray-900"
                     >
-                        Authenticate Connection
-                    </button>
-                </form>
-
-                <div class="mt-12 pt-8 border-t border-white/5 flex justify-center gap-8 items-center grayscale opacity-40 hover:grayscale-0 hover:opacity-100 transition-all">
-                    <img src="https://img.icons8.com/ios-filled/50/ffffff/windows-10.png" class="h-5 w-5" title="Windows Optimized">
-                    <img src="https://img.icons8.com/ios-filled/50/ffffff/xbox.png" class="h-5 w-5" title="Console Support">
-                    <img src="https://img.icons8.com/ios-filled/50/ffffff/playstation.png" class="h-5 w-5" title="Low Latency PS5">
                 </div>
+
+                <button 
+                    type="submit" 
+                    class="w-full bg-white text-black font-black py-5 rounded-2xl transition-all hover:bg-cyan-400 btn-pulse uppercase tracking-tighter text-sm"
+                >
+                    Initialize Connection
+                </button>
+            </form>
+
+            <div class="mt-10 flex justify-center gap-8 items-center opacity-20 grayscale">
+                <img src="https://img.icons8.com/ios-filled/50/ffffff/windows-10.png" class="h-4 w-4">
+                <img src="https://img.icons8.com/ios-filled/50/ffffff/xbox.png" class="h-4 w-4">
+                <img src="https://img.icons8.com/ios-filled/50/ffffff/playstation.png" class="h-4 w-4">
             </div>
-            
-            <p class="mt-12 text-[9px] text-gray-700 font-mono tracking-[0.5em] uppercase">Universal Optimization Protocol Locked</p>
         </div>
+
+        <p class="text-center text-[9px] text-gray-700 font-mono tracking-[0.5em] uppercase">Universal Protocol // Secured by PostgreSQL</p>
     </div>
 
     <script>
-        // QoL: Automated Key Formatting
+        // QoL: Automated Key Formatting (Dashes & Caps)
         const input = document.getElementById('key-input');
         input.addEventListener('input', (e) => {
-            // Remove non-alphanumeric and uppercase everything
             let value = e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, '');
-            
-            // Limit to 12 characters (for 3 blocks of 4)
             if (value.length > 12) value = value.slice(0, 12);
-            
-            // Insert dashes
             const parts = value.match(/.{1,4}/g);
             e.target.value = parts ? parts.join('-') : value;
         });
-
-        // Add a subtle sound effect or haptic feel if you want later!
     </script>
 </body>
 </html>
