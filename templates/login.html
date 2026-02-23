@@ -1,17 +1,64 @@
 <!DOCTYPE html>
-<html class="bg-black text-cyan-400">
+<html lang="en" class="scroll-smooth">
 <head>
-    <title>Opti AI | Access</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Opti AI | The Future of Performance</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* This handles your recurring GIF background */
+        body {
+            background: url('https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNGJueW94bmZ6bmZ6bmZ6bmZ6bmZ6bmZ6bmZ6bmZ6bmZ6bmZ6bmZ6JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1n/3o7TKMGpxxcaetns9a/giphy.gif') no-repeat center center fixed;
+            background-size: cover;
+        }
+        .glass {
+            background: rgba(0, 0, 0, 0.75);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(34, 211, 238, 0.2);
+        }
+        .hero-text { text-shadow: 0 0 20px #22d3ee; }
+    </style>
 </head>
-<body class="flex items-center justify-center h-screen">
-    <div class="bg-gray-900 p-8 border border-cyan-500 rounded-lg shadow-lg">
-        <h1 class="text-2xl font-bold mb-4">Enter License ID</h1>
-        <form action="/opti" method="POST">
-            <input name="license_id" placeholder="OPTI-XXXX" class="bg-black border border-cyan-800 p-2 mb-4 w-full outline-none">
-            <button class="bg-cyan-600 text-black font-bold py-2 px-4 w-full hover:bg-cyan-400">UNLOCK OPTI AI</button>
-        </form>
-        <p class="text-xs mt-4 text-gray-500 text-center">Don't have a key? Visit our Discord.</p>
-    </div>
+<body class="text-white font-sans">
+
+    <section class="h-screen flex flex-col items-center justify-center text-center px-4">
+        <h1 class="text-6xl md:text-8xl font-black uppercase tracking-tighter hero-text mb-4">Opti AI</h1>
+        <p class="text-xl text-cyan-400 font-mono mb-8 uppercase tracking-widest">Zero Latency. Absolute Performance.</p>
+        <a href="#access" class="bg-cyan-600 hover:bg-cyan-400 text-black font-bold py-4 px-10 rounded-full transition-all animate-bounce">
+            SCROLL TO UNLOCK
+        </a>
+    </section>
+
+    <section class="min-h-screen py-20 bg-black/80 flex flex-col items-center">
+        <div class="max-w-4xl grid md:grid-cols-3 gap-8 px-6 text-center">
+            <div class="p-8 border border-cyan-900 rounded-2xl bg-black/50">
+                <h3 class="text-cyan-400 font-bold mb-2">FPS Boost</h3>
+                <p class="text-sm text-gray-400">Deep kernel-level optimizations for modern titles.</p>
+            </div>
+            <div class="p-8 border border-cyan-900 rounded-2xl bg-black/50">
+                <h3 class="text-cyan-400 font-bold mb-2">Latency</h3>
+                <p class="text-sm text-gray-400">Network stack tweaks to crush your ping.</p>
+            </div>
+            <div class="p-8 border border-cyan-900 rounded-2xl bg-black/50">
+                <h3 class="text-cyan-400 font-bold mb-2">Support</h3>
+                <p class="text-sm text-gray-400">24/7 AI-driven hardware troubleshooting.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="access" class="h-screen flex items-center justify-center bg-black/40">
+        <div class="glass p-10 rounded-3xl w-full max-w-md shadow-2xl shadow-cyan-500/20">
+            <h2 class="text-2xl font-bold mb-6 text-center uppercase tracking-widest">Enter Access Key</h2>
+            <form action="/opti" method="post" class="space-y-6">
+                <input type="password" name="license_id" placeholder="OPTI-XXXX-XXXX" 
+                    class="w-full bg-black/50 border border-cyan-800 p-4 rounded-xl text-center text-cyan-400 tracking-widest focus:border-cyan-400 outline-none">
+                <button type="submit" class="w-full bg-cyan-600 hover:bg-cyan-400 text-black font-black py-4 rounded-xl uppercase transition-all">
+                    Initialize System
+                </button>
+            </form>
+            <p class="mt-6 text-center text-xs text-gray-500">Don't have a key? Contact your distributor on Discord.</p>
+        </div>
+    </section>
+
 </body>
 </html>
