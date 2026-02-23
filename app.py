@@ -28,7 +28,8 @@ def init_db():
 
 init_db()
 
-VALID_KEYS = ["OPTI-1234", "OPTI-5678", "VIP-ACCESS"]
+# ADDED THE NEW KEY HERE
+VALID_KEYS = ["OPTI-1234", "OPTI-5678", "VIP-ACCESS", "OPTI-2026-X"]
 
 @app.route('/')
 def login():
@@ -42,7 +43,7 @@ def handle_login():
     user_ip = request.remote_addr
 
     if user_key not in VALID_KEYS:
-        return "Invalid License Key."
+        return "Invalid License Key. Access Denied."
 
     conn = get_db_connection()
     cur = conn.cursor()
@@ -61,6 +62,7 @@ def handle_login():
     cur.close()
     conn.close()
     session["user_key"] = user_key
+    # Initial prompt for the AI to ask for specs
     session["history"] = [{"role": "assistant", "content": "System Initialized. I am Opti AI. Before we begin optimization, please provide your Specs (CPU, GPU, RAM) and your Platform (Windows 10/11, Console, etc.)."}]
     return redirect(url_for('opti_chat'))
 
@@ -80,7 +82,6 @@ def ask_ai():
     system_msg = {
         "role": "system", 
         "content": """You are Opti AI, a specialized performance architect.
-        INSTRUCTIONS:
         1. If user hasn't provided specs, ask for them.
         2. Once specs are provided, give ELITE platform-specific tweaks.
         3. Use neat spacing and bullet points.
@@ -101,6 +102,16 @@ def ask_ai():
         return ai_msg
     except Exception as e:
         return f"AI Error: {str(e)}"
+
+@app.route('/admin-panel-99')
+def admin_list():
+    conn = get_db_connection()
+    cur = conn.cursor()
+    cur.execute("SELECT * FROM license_claims;")
+    rows = cur.fetchall()
+    cur.close()
+    conn.close()
+    return f"<h2>Claims:</h2>{str(rows)}"
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 10000))
