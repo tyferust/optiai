@@ -1,75 +1,68 @@
 <!DOCTYPE html>
-<html class="bg-black text-white scroll-smooth">
+<html class="bg-black text-white scroll-smooth h-full">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Opti AI | Command Center</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        /* 1. ANIMATIONS (QoL) */
         @keyframes message-in {
-            0% { opacity: 0; transform: translateY(20px) scale(0.95); }
+            0% { opacity: 0; transform: translateY(15px) scale(0.98); }
             100% { opacity: 1; transform: translateY(0) scale(1); }
         }
-        .animate-msg { animation: message-in 0.4s cubic-bezier(0.17, 0.67, 0.83, 0.67) forwards; }
-
-        .typing-dot { animation: blink 1.4s infinite both; font-size: 24px; }
+        .animate-msg { animation: message-in 0.3s ease-out forwards; }
+        .typing-dot { animation: blink 1.4s infinite both; font-size: 20px; }
         .typing-dot:nth-child(2) { animation-delay: .2s; }
         .typing-dot:nth-child(3) { animation-delay: .4s; }
         @keyframes blink { 0% { opacity: .2; } 20% { opacity: 1; } 100% { opacity: .2; } }
 
-        /* 2. CUSTOM SCROLLBAR */
         ::-webkit-scrollbar { width: 4px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: #0891b2; border-radius: 10px; box-shadow: 0 0 10px #0891b2; }
-
+        ::-webkit-scrollbar-thumb { background: #0891b2; border-radius: 10px; }
+        
         .glass-panel {
             background: rgba(8, 145, 178, 0.03);
             border: 1px solid rgba(8, 145, 178, 0.15);
-            backdrop-filter: blur(12px);
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
         }
+        .star-glow { text-shadow: 0 0 10px rgba(255, 215, 0, 0.6); }
+        .risk-glow { text-shadow: 0 0 10px rgba(239, 68, 68, 0.6); }
     </style>
 </head>
-<body class="flex flex-col h-screen overflow-hidden">
+<body class="flex flex-col h-full overflow-hidden">
 
-    <header class="flex justify-between items-center px-8 py-4 border-b border-cyan-900/30 bg-black/90 backdrop-blur-xl z-50">
+    <header class="flex justify-between items-center px-6 py-4 border-b border-cyan-900/30 bg-black/90 z-50">
         <div class="flex items-center gap-3">
             <div class="w-2 h-2 bg-cyan-500 rounded-full animate-pulse shadow-[0_0_10px_#22d3ee]"></div>
             <h1 class="text-cyan-400 font-bold tracking-[0.3em] uppercase text-[10px]">Opti AI Core</h1>
         </div>
-        <div class="flex items-center gap-4">
-            <span class="text-green-500 text-[10px] font-mono border border-green-500/20 px-2 py-0.5 rounded">DATABASE: ACTIVE</span>
-            <span class="text-gray-500 text-[10px] font-mono">{{ user_id }}</span>
-        </div>
+        <span class="text-gray-600 text-[10px] font-mono border border-white/5 px-2 py-1 rounded">ID: {{ user_id }}</span>
     </header>
 
-    <main id="chat-container" class="flex-1 overflow-y-auto p-4 md:p-10 space-y-8 scroll-smooth">
+    <main id="chat-container" class="flex-1 overflow-y-auto p-4 md:p-10 space-y-6">
         <div class="max-w-4xl mx-auto" id="dynamic-content">
-            <div class="flex justify-start mb-8 animate-msg">
+            <div class="flex justify-start mb-6 animate-msg">
                 <div class="glass-panel p-6 rounded-2xl rounded-tl-none text-gray-200 border-l-2 border-l-cyan-500">
-                    <p class="font-mono text-cyan-500 text-[9px] mb-3 uppercase tracking-widest">System Broadcast</p>
+                    <p class="font-mono text-cyan-500 text-[9px] mb-2 uppercase tracking-widest">System Boot</p>
                     {{ initial_msg }}
                 </div>
             </div>
         </div>
 
-        <div id="loader" class="hidden max-w-4xl mx-auto flex items-center gap-3 text-cyan-500/50 font-mono text-xs italic px-6">
-            <span class="animate-pulse">Processing Advanced Protocols</span>
+        <div id="loader" class="hidden max-w-4xl mx-auto flex items-center gap-3 text-cyan-500/50 font-mono text-[10px] italic px-6">
+            <span>RUNNING ANALYTICS</span>
             <span class="flex gap-1"><span class="typing-dot">.</span><span class="typing-dot">.</span><span class="typing-dot">.</span></span>
         </div>
-        
-        <div class="h-20"></div> </main>
+    </main>
 
-    <footer class="p-6 bg-gradient-to-t from-black via-black/95 to-transparent">
+    <footer class="p-6 bg-black">
         <div class="max-w-4xl mx-auto relative">
             <form id="ask-form" class="relative group">
                 <input 
-                    type="text" id="user-query" autocomplete="off"
-                    placeholder="Describe your specs or ask a hardware question..." 
-                    class="w-full bg-[#0a0a0a] border border-cyan-900/50 p-5 rounded-2xl text-white outline-none focus:border-cyan-400/50 focus:ring-1 focus:ring-cyan-400/20 transition-all pr-28 text-sm md:text-base"
+                    type="text" id="user-query" autocomplete="off" autofocus
+                    placeholder="Provide specs or ask for a tweak..." 
+                    class="w-full bg-[#0a0a0a] border border-cyan-900/50 p-5 rounded-2xl text-white outline-none focus:border-cyan-400/50 transition-all pr-28 text-sm"
                 >
-                <button type="submit" class="absolute right-2 top-2 bottom-2 bg-cyan-600 hover:bg-cyan-500 text-black px-6 rounded-xl font-bold text-xs transition-all flex items-center gap-2">
+                <button type="submit" class="absolute right-2 top-2 bottom-2 bg-cyan-600 hover:bg-cyan-500 text-black px-6 rounded-xl font-bold text-[10px] transition-all">
                     EXECUTE
                 </button>
             </form>
@@ -82,9 +75,30 @@
         const loader = document.getElementById('loader');
         const container = document.getElementById('chat-container');
 
+        // QoL: Automated scroll to bottom
         const scrollBottom = () => {
             container.scrollTo({ top: container.scrollHeight, behavior: 'smooth' });
         };
+
+        // QoL: The Star/Risk Image Engine
+        function parseRatings(text) {
+            return text.replace(/\[EFF: (\d)\] \[RSK: (\d)\]/g, (match, eff, rsk) => {
+                const effStars = '⭐'.repeat(eff);
+                const rskIcons = '⚠️'.repeat(rsk);
+                return `
+                    <div class="mt-6 pt-4 border-t border-white/5 grid grid-cols-2 gap-4">
+                        <div class="bg-white/5 p-3 rounded-xl border border-white/5">
+                            <p class="text-[9px] text-cyan-500 uppercase font-mono mb-1">Effectiveness</p>
+                            <div class="star-glow text-xs">${effStars}</div>
+                        </div>
+                        <div class="bg-white/5 p-3 rounded-xl border border-white/5">
+                            <p class="text-[9px] text-red-500 uppercase font-mono mb-1">Risk Factor</p>
+                            <div class="risk-glow text-xs">${rskIcons}</div>
+                        </div>
+                    </div>
+                `;
+            });
+        }
 
         form.onsubmit = async (e) => {
             e.preventDefault();
@@ -92,10 +106,9 @@
             const query = input.value.trim();
             if(!query) return;
 
-            // 1. Add User Msg with Animation
             chatContent.innerHTML += `
-                <div class="flex justify-end mb-8 animate-msg">
-                    <div class="bg-cyan-900/10 border border-cyan-500/20 p-5 rounded-2xl rounded-tr-none text-cyan-50 max-w-[85%] shadow-xl">
+                <div class="flex justify-end mb-6 animate-msg">
+                    <div class="bg-cyan-900/10 border border-cyan-500/20 p-5 rounded-2xl rounded-tr-none text-cyan-50 max-w-[85%] text-sm">
                         ${query}
                     </div>
                 </div>`;
@@ -104,30 +117,27 @@
             loader.classList.remove('hidden');
             scrollBottom();
 
-            try {
-                const response = await fetch('/ask', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                    body: `query=${encodeURIComponent(query)}`
-                });
-                const result = await response.text();
-                
-                loader.classList.add('hidden');
-                
-                // 2. Add AI Msg with Animation
-                chatContent.innerHTML += `
-                    <div class="flex justify-start mb-8 animate-msg">
-                        <div class="glass-panel p-6 rounded-2xl rounded-tl-none text-gray-200 max-w-[90%] whitespace-pre-line border-l-2 border-l-cyan-500">
-                            <p class="font-mono text-cyan-500 text-[9px] mb-3 uppercase tracking-widest">Opti AI Response</p>
-                            ${result}
-                        </div>
-                    </div>`;
-                
-                scrollBottom();
-            } catch (err) {
-                loader.classList.add('hidden');
-                console.error(err);
-            }
+            const response = await fetch('/ask', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: `query=${encodeURIComponent(query)}`
+            });
+            
+            const result = await response.text();
+            loader.classList.add('hidden');
+            
+            // Apply the star engine to the result
+            const formattedResult = parseRatings(result);
+
+            chatContent.innerHTML += `
+                <div class="flex justify-start mb-6 animate-msg">
+                    <div class="glass-panel p-6 rounded-2xl rounded-tl-none text-gray-200 max-w-[90%] whitespace-pre-line border-l-2 border-l-cyan-500 text-sm">
+                        <p class="font-mono text-cyan-500 text-[9px] mb-3 uppercase tracking-widest">Opti AI Response</p>
+                        ${formattedResult}
+                    </div>
+                </div>`;
+            
+            scrollBottom();
         };
     </script>
 </body>
