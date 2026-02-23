@@ -4,71 +4,35 @@ from flask import Flask, render_template, request, session, redirect, url_for
 from openai import OpenAI
 
 app = Flask(__name__)
-app.secret_key = os.environ.get("FLASK_SECRET_KEY", "opti_ultra_premium_2026")
+app.secret_key = os.environ.get("FLASK_SECRET_KEY", "opti_premium_2026")
 client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
 
-# DATABASE CONNECTION
 DB_URL = os.environ.get("DATABASE_URL")
 
 def get_db_connection():
-    # connect_timeout prevents the "infinite loading" hang
     return psycopg2.connect(DB_URL, connect_timeout=10)
-
-def init_db():
-    try:
-        conn = get_db_connection()
-        cur = conn.cursor()
-        cur.execute('''
-            CREATE TABLE IF NOT EXISTS license_claims (
-                license_key TEXT PRIMARY KEY,
-                user_ip TEXT
-            )
-        ''')
-        conn.commit()
-        cur.close()
-        conn.close()
-    except Exception as e:
-        print(f"DB Error: {e}")
-
-if DB_URL:
-    init_db()
-
-# MASTER KEYS
-VALID_KEYS = ["OPTI-1234", "OPTI-5678", "VIP-ACCESS", "OPTI-2026-X"]
 
 @app.route('/')
 def login():
-    if "user_key" in session:
-        return redirect(url_for('opti_chat'))
+    if "user_key" in session: return redirect(url_for('opti_chat'))
     return render_template('login.html')
+
+@app.route('/logout')
+def logout():
+    session.clear() # Clears license and chat history
+    return redirect(url_for('login'))
 
 @app.route('/opti', methods=['POST'])
 def handle_login():
-    # Force uppercase and strip spaces for user QoL
     user_key = request.form.get('license_id', '').strip().upper()
-    user_ip = request.remote_addr
+    valid_keys = ["OPTI-1234", "OPTI-5678", "VIP-ACCESS", "OPTI-2026-X"]
 
-    if user_key not in VALID_KEYS:
-        return f"Invalid Key: {user_key}. Please try again."
-
-    try:
-        conn = get_db_connection()
-        cur = conn.cursor()
-        cur.execute("SELECT user_ip FROM license_claims WHERE license_key = %s", (user_key,))
-        result = cur.fetchone()
-        if result and result[0] != user_ip:
-            return "ACCESS DENIED: Key locked to another device."
-        elif not result:
-            cur.execute("INSERT INTO license_claims (license_key, user_ip) VALUES (%s, %s)", (user_key, user_ip))
-            conn.commit()
-        cur.close()
-        conn.close()
-    except:
-        pass 
-    
-    session["user_key"] = user_key
-    session["history"] = [{"role": "assistant", "content": "System Initialized. Provide specs to begin."}]
-    return redirect(url_for('opti_chat'))
+    if user_key in valid_keys:
+        session["user_key"] = user_key
+        # Initial greeting forces the onboarding flow
+        session["history"] = [{"role": "assistant", "content": "System Initialized. To begin your optimization journey, please provide your **Specs (CPU/GPU/RAM)**, **Platform**, and **Favorite Games**."}]
+        return redirect(url_for('opti_chat'))
+    return "Invalid Key."
 
 @app.route('/dashboard')
 def opti_chat():
@@ -80,15 +44,26 @@ def ask_ai():
     if "user_key" not in session: return "Unauthorized", 401
     user_query = request.form.get('query')
     history = session.get("history", [])
-    system_msg = {"role": "system", "content": "You are Opti AI. Use bullet points. End with [EFF: X] [RSK: Y]."}
+
+    system_msg = {
+        "role": "system", 
+        "content": """You are Opti AI. Follow this workflow strictly:
+        1. On the FIRST user message (Specs/Games), acknowledge them briefly, then ASK: 'What kind of optimizations do you want? (General Windows, Advanced Windows, Internet/Wifi, or BIOS)'.
+        2. Do NOT provide tips until the user has chosen one of those categories.
+        3. Once a category is chosen, provide elite, surgical tips.
+        4. ALWAYS end every optimization response with ratings: [EFF: X/5] [RSK: Y/5]."""
+    }
+
     history.append({"role": "user", "content": user_query})
-    response = client.chat.completions.create(model="gpt-4o", messages=[system_msg] + history[-6:])
-    ai_msg = response.choices[0].message.content
-    history.append({"role": "assistant", "content": ai_msg})
-    session["history"] = history
-    return ai_msg
+    try:
+        response = client.chat.completions.create(model="gpt-4o", messages=[system_msg] + history[-10:])
+        ai_msg = response.choices[0].message.content
+        history.append({"role": "assistant", "content": ai_msg})
+        session["history"] = history
+        return ai_msg
+    except Exception as e:
+        return f"AI Error: {str(e)}"
 
 if __name__ == "__main__":
-    # RENDER PORT LOGIC
     port = int(os.environ.get("PORT", 10000))
     app.run(host='0.0.0.0', port=port)
