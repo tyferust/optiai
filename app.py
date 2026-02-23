@@ -4,21 +4,16 @@ from flask import Flask, render_template, request, session, redirect, url_for
 from openai import OpenAI
 
 app = Flask(__name__)
-app.secret_key = os.environ.get("FLASK_SECRET_KEY", "opti_premium_v2")
+app.secret_key = os.environ.get("FLASK_SECRET_KEY", "opti_premium_2026")
 
-# FIXED: Changed api_api_key to api_key to resolve the TypeError
+# FIX 1: Corrected 'api_key' to prevent the TypeError crash
 client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
 
-# TOPIC GUARDRAILS
-SYSTEM_PROMPT = """You are Opti AI, a specialized PC optimization architect. 
-RULES:
-1. ONLY discuss PC optimization, BIOS tweaks, Windows settings, and latency.
-2. If the user asks about ANY other topic (food, movies, etc.), reply: 'I am specialized only in performance tuning. Please stay on topic.'
-3. NO asterisks (**). Use clean text with emojis.
-4. Onboarding: Ask for Specs/Platform/Games first, then ask for a category."""
-
-def clean_output(text):
-    return re.sub(r'\*+', '', text)
+# Strict System Prompt to prevent random off-topic answers
+SYSTEM_PROMPT = (
+    "You are Opti AI. ONLY answer questions about PC optimization, Windows, and gaming performance. "
+    "If asked about other topics, refuse politely. NO asterisks (**) in your output. Use emojis."
+)
 
 @app.route('/')
 def login():
@@ -33,10 +28,9 @@ def logout():
 @app.route('/opti', methods=['POST'])
 def handle_login():
     user_key = request.form.get('license_id', '').strip().upper()
-    # Replace with your actual key logic
     if user_key:
         session["user_key"] = user_key
-        session["history"] = [{"role": "assistant", "content": "⚡ Neural Link Active. Provide your Specs, Platform, and Favorite Games to begin."}]
+        session["history"] = [{"role": "assistant", "content": "⚡ System Online. Please provide your Specs, Platform, and Favorite Games."}]
         return redirect(url_for('opti_chat'))
     return "Invalid Key."
 
@@ -55,17 +49,18 @@ def ask_ai():
     try:
         response = client.chat.completions.create(
             model="gpt-4o", 
-            messages=[{"role": "system", "content": SYSTEM_PROMPT}] + history[-6:],
-            temperature=0.3 # Low temperature makes AI stick to rules better
+            messages=[{"role": "system", "content": SYSTEM_PROMPT}] + history[-10:],
+            temperature=0.3
         )
-        clean_msg = clean_output(response.choices[0].message.content)
+        # Strip asterisks for clean formatting
+        clean_msg = re.sub(r'\*+', '', response.choices[0].message.content)
         history.append({"role": "assistant", "content": clean_msg})
         session["history"] = history
         return clean_msg
     except Exception as e:
-        return f"Error: {str(e)}"
+        return f"System Error: {str(e)}"
 
 if __name__ == "__main__":
-    # Render requires binding to 0.0.0.0 and the $PORT variable
+    # FIX 2: Bind to 0.0.0.0 and use the Render PORT environment variable
     port = int(os.environ.get("PORT", 10000))
     app.run(host='0.0.0.0', port=port)
