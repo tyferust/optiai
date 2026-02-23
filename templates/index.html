@@ -1,82 +1,57 @@
 <!DOCTYPE html>
-<html lang="en" class="bg-black text-cyan-400">
+<html class="bg-black text-white">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Opti AI | Knowledge Bank</title>
+    <title>Opti AI | Command Center</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        /* Custom scrollbar for that gamer aesthetic */
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: #000; }
-        ::-webkit-scrollbar-thumb { background: #0891b2; border-radius: 10px; }
-        .glow { text-shadow: 0 0 10px #22d3ee; }
+        .typing-dot { animation: blink 1.4s infinite both; font-size: 24px; }
+        .typing-dot:nth-child(2) { animation-delay: .2s; }
+        .typing-dot:nth-child(3) { animation-delay: .4s; }
+        @keyframes blink { 0% { opacity: .2; } 20% { opacity: 1; } 100% { opacity: .2; } }
     </style>
 </head>
-<body class="min-h-screen flex flex-col items-center p-4 md:p-10">
-    
-    <div class="w-full max-w-4xl flex justify-between items-center mb-8 border-b border-cyan-900 pb-4">
-        <h1 class="text-3xl font-black tracking-tighter glow uppercase">Opti AI <span class="text-white text-sm font-normal tracking-normal ml-2">Knowledge Bank v1.0</span></h1>
-        <div class="text-right">
-            <p class="text-xs text-cyan-700 uppercase">License Status</p>
-            <p class="text-sm font-bold text-green-500">ACTIVE: {{ user_id }}</p>
+<body class="flex flex-col h-screen p-6">
+    <div class="flex justify-between border-b border-cyan-900 pb-4 mb-4">
+        <h1 class="text-cyan-400 font-bold tracking-widest uppercase">Opti AI Knowledge Bank</h1>
+        <span class="text-green-500 text-xs">CONNECTED: {{ user_id }}</span>
+    </div>
+
+    <div id="chat-box" class="flex-1 overflow-y-auto space-y-6 px-4 md:px-20 lg:px-40">
+        <div class="text-gray-500 text-sm italic">System initialized... Awaiting commands.</div>
+        <div id="dynamic-content" class="space-y-6"></div>
+        <div id="loader" class="hidden flex items-center gap-2 text-cyan-500 italic">
+            Opti AI is calculating<span class="typing-dot">.</span><span class="typing-dot">.</span><span class="typing-dot">.</span>
         </div>
     </div>
 
-    <div class="bg-gray-900 border border-cyan-500 rounded-lg w-full max-w-4xl flex flex-col overflow-hidden shadow-2xl shadow-cyan-900/20">
-        
-        <div id="chat-box" class="h-[500px] overflow-y-auto p-6 space-y-4 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')]">
-            <div class="flex flex-col gap-2">
-                <span class="text-xs font-bold text-cyan-600 uppercase">System</span>
-                <p class="bg-cyan-950/50 border border-cyan-800 p-3 rounded text-gray-200">
-                    Connection established. Opti AI is online. Ask me anything about Windows optimization, FPS boosting, or network latency.
-                </p>
-            </div>
-            <div id="dynamic-content"></div>
-        </div>
-
-        <form id="ask-form" class="p-4 bg-black border-t border-cyan-900 flex gap-4">
-            <input 
-                type="text" 
-                id="user-query"
-                name="query" 
-                placeholder="Ask a question (e.g., 'Best NVIDIA settings for FPS?')" 
-                class="flex-1 bg-gray-900 border border-cyan-800 p-3 rounded text-white focus:outline-none focus:border-cyan-400 transition-all"
-                required
-            >
-            <button 
-                type="submit" 
-                class="bg-cyan-600 hover:bg-cyan-400 text-black font-black px-8 rounded transition-colors uppercase tracking-widest"
-            >
-                Execute
+    <div class="mt-6 px-4 md:px-20 lg:px-40 pb-10">
+        <form id="ask-form" class="relative">
+            <input id="user-query" placeholder="Ask anything about FPS or Latency..." 
+                class="w-full bg-gray-900 border border-cyan-900 p-5 rounded-xl text-lg outline-none focus:border-cyan-400 transition-all pr-32">
+            <button type="submit" class="absolute right-3 top-3 bottom-3 bg-cyan-600 text-black px-6 rounded-lg font-bold hover:bg-cyan-400">
+                EXECUTE
             </button>
         </form>
-    </div>
-
-    <div class="mt-8 text-center text-gray-600 text-xs max-w-2xl">
-        <p>Opti AI uses GPT-4o architecture. All optimizations provided should be tested in a safe environment. Check Discord for the latest .reg tweaks and scripts.</p>
     </div>
 
     <script>
         const form = document.getElementById('ask-form');
         const chatBox = document.getElementById('dynamic-content');
-        const queryInput = document.getElementById('user-query');
+        const loader = document.getElementById('loader');
 
         form.onsubmit = async (e) => {
             e.preventDefault();
-            const query = queryInput.value;
-            
-            // Add user message to UI
-            chatBox.innerHTML += `
-                <div class="flex flex-col gap-2 items-end">
-                    <span class="text-xs font-bold text-gray-500 uppercase">You</span>
-                    <p class="bg-gray-800 p-3 rounded text-white">${query}</p>
-                </div>
-            `;
-            
-            queryInput.value = ''; // Clear input
+            const query = document.getElementById('user-query').value;
+            if(!query) return;
 
-            // Fetch AI response
+            // Add User Message
+            chatBox.innerHTML += `<div class="text-right"><p class="inline-block bg-gray-800 p-4 rounded-2xl max-w-md">${query}</p></div>`;
+            document.getElementById('user-query').value = '';
+            
+            // Show Loader
+            loader.classList.remove('hidden');
+            window.scrollTo(0, document.body.scrollHeight);
+
             const response = await fetch('/ask', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
@@ -84,18 +59,11 @@
             });
             
             const result = await response.text();
-
-            // Add AI message to UI
-            chatBox.innerHTML += `
-                <div class="flex flex-col gap-2">
-                    <span class="text-xs font-bold text-cyan-600 uppercase">Opti AI</span>
-                    <div class="bg-cyan-950/30 border border-cyan-900 p-3 rounded text-gray-200 whitespace-pre-line">${result}</div>
-                </div>
-            `;
             
-            // Auto-scroll to bottom
-            const container = document.getElementById('chat-box');
-            container.scrollTop = container.scrollHeight;
+            // Hide Loader & Add AI Message
+            loader.classList.add('hidden');
+            chatBox.innerHTML += `<div class="text-left animate-fade-in"><div class="bg-cyan-950/20 border border-cyan-900 p-6 rounded-2xl whitespace-pre-line text-gray-200">${result}</div></div>`;
+            window.scrollTo(0, document.body.scrollHeight);
         };
     </script>
 </body>
